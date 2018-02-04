@@ -6,13 +6,32 @@ sudo: enabled
 language: bash
 script: 
     - bash which-branch.sh
+
 services:
   - docker
+
 before_install:
-  - docker build -t nemagee/trav_test .
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker build -t somrc/lolatest:latest .
+    fi
+  - if [ "$TRAVIS_BRANCH" == "dev" ]; then
+    cd dev/
+    docker build -t somrc/lolatest:dev .
+    fi
+
 notifications:
   email:
     on_success: always
     on_failure: always
     recipients:
     - nmagee@gmail.com
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push somrc/lolatest:dev;
+    fi
+  - if [ "$TRAVIS_BRANCH" == "dev" ]; then
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push somrc/lolatest:dev;
+    fi
