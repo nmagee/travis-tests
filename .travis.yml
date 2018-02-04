@@ -4,8 +4,6 @@ branches:
   - dev
 sudo: enabled
 language: bash
-script: 
-    - bash which-branch.sh
 
 services:
   - docker
@@ -13,10 +11,14 @@ services:
 before_install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker build -t somrc/lolatest:latest . ;
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push somrc/lolatest:dev;
     fi
   - if [ "$TRAVIS_BRANCH" == "dev" ]; then
     cd dev/ ;
     docker build -t somrc/lolatest:dev . ;
+    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    docker push somrc/lolatest:dev;
     fi
 
 notifications:
@@ -25,13 +27,3 @@ notifications:
     on_failure: always
     recipients:
     - nmagee@gmail.com
-
-after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push somrc/lolatest:dev;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "dev" ]; then
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push somrc/lolatest:dev;
-    fi
