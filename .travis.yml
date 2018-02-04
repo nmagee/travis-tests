@@ -1,2 +1,5 @@
-before_script: which-branch.sh
-# script: .travis/build.sh
+sudo: enabled
+
+language: bash
+
+script: which-branch.sh
