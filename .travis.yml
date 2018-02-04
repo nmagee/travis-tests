@@ -5,6 +5,13 @@ branches:
 
 sudo: enabled
 
-language: bash
+language: python
 
 script: which-branch.sh
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
+    recipients:
+    - nmagee@gmail.com
