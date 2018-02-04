@@ -2,13 +2,10 @@ branches:
   only:
   - master
   - dev
-
 sudo: enabled
-
-language: python
-
-script: which-branch.sh
-
+language: bash
+script: 
+    - bash which-branch.sh
 notifications:
   email:
     on_success: always
