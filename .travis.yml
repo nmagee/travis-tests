@@ -16,22 +16,22 @@ before_install:
 
 install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build --no-cache -t somrc/lolatest:latest . ;
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push somrc/lolatest:latest;
+#    docker build --no-cache -t somrc/lolatest:latest . ;
+#    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+#    docker push somrc/lolatest:latest;
     /home/travis/.local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH';
     fi
   - if [ "$TRAVIS_BRANCH" == "staging" ]; then
-    docker build --no-cache -t somrc/lolatest:staging . ;
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push somrc/lolatest:staging;
+#    docker build --no-cache -t somrc/lolatest:staging . ;
+#    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+#    docker push somrc/lolatest:staging;
     /home/travis/.local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH';
     fi
   - if [ "$TRAVIS_BRANCH" == "dev" ]; then
     cd dev/ ;
-    docker build --no-cache -t somrc/lolatest:dev . ;
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push somrc/lolatest:dev;
+#    docker build --no-cache -t somrc/lolatest:dev . ;
+#    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+#    docker push somrc/lolatest:dev;
     /home/travis/.local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH';
     fi
 
