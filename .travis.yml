@@ -27,7 +27,7 @@ install:
 
 notifications:
   email:
-    on_success: always
+    on_success: change
     on_failure: always
     recipients:
     - nmagee@gmail.com
@@ -35,4 +35,4 @@ notifications:
 after_success:
   # Create a message in SQS
   - provider: script
-    script: /usr/local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH' --region=us-east-1
+    script:  ~/.local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH' --region=us-east-1
