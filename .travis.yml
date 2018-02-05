@@ -11,6 +11,7 @@ services:
 
 before_install:
   - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
   - bash -c 'which aws'
   - bash -c 'whereis aws'
 
@@ -30,10 +31,11 @@ install:
     docker build --no-cache -t somrc/lolatest:dev . ;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push somrc/lolatest:dev;
+    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH';
     fi
 
-script:
-  - /home/travis/.local/bin/aws sqs list-queues
+# script:
+#   - /home/travis/.local/bin/aws sqs list-queues
 
 # after_success:
 #   - if [ "$TRAVIS_BRANCH" == "master" ]; then
