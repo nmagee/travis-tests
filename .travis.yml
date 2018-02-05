@@ -32,10 +32,10 @@ install:
     docker push somrc/lolatest:dev;
     fi
 
-script:
+after_success:
   - provider: script
     # script: ~/.local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH'
-    script: ~/.local/bin/aws sqs list-queues
+    script: /home/travis/.local/bin/aws sqs list-queues
 
 # after_success:
 #   - if [ "$TRAVIS_BRANCH" == "master" ]; then
