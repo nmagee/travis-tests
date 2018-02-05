@@ -14,24 +14,23 @@ services:
 before_install:
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" || echo "Unable to log in" && exit 1;
 
 install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    docker build --no-cache -t somrc/lolatest:latest . ;
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-    docker push somrc/lolatest:latest;
-    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+    docker build --no-cache -t somrc/lolatest:latest .  || echo "Unable to build container" && exit 1;
+    docker push somrc/lolatest:latest || echo "" && exit 1;
+    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH || echo "Unable to send SQS" && exit 1;
     fi
   - if [ "$TRAVIS_BRANCH" == "staging" ]; then
+    cd staging/
     docker build --no-cache -t somrc/lolatest:staging . ;
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push somrc/lolatest:staging;
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
   - if [ "$TRAVIS_BRANCH" == "dev" ]; then
     cd dev/ ;
     docker build --no-cache -t somrc/lolatest:dev . ;
-    docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push somrc/lolatest:dev;
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
