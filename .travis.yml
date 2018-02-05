@@ -11,6 +11,8 @@ services:
 
 before_install:
   - pip install --user awscli
+  - whereis aws
+  - which aws
 
 install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
