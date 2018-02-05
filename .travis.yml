@@ -14,31 +14,27 @@ services:
 before_install:
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
-  - bash -c 'which aws'
-  - bash -c 'whereis aws'
 
 install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker build --no-cache -t somrc/lolatest:latest . ;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push somrc/lolatest:latest;
-    # aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
   - if [ "$TRAVIS_BRANCH" == "staging" ]; then
     docker build --no-cache -t somrc/lolatest:staging . ;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push somrc/lolatest:staging;
-    # aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
   - if [ "$TRAVIS_BRANCH" == "dev" ]; then
     cd dev/ ;
     docker build --no-cache -t somrc/lolatest:dev . ;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
     docker push somrc/lolatest:dev;
-    # aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
-  - aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-
 
 notifications:
   email:
