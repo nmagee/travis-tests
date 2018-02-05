@@ -3,6 +3,7 @@ branches:
   - master
   - dev
 sudo: enabled
+
 language: bash
 
 services:
@@ -27,3 +28,11 @@ notifications:
     on_failure: always
     recipients:
     - nmagee@gmail.com
+
+before_deploy: pip install --user awscli
+
+deploy:
+  # Create a message in SQS
+  - provider: script
+    # script: ~/.local/bin/aws sns publish --region=us-east-1 --topic-arn '$TOPIC_ARN' --message '{'clear'}'
+    script: ~/.local/bin/aws sqs send-message --queue-url "https://queue.amazonaws.com/474683445819/lola-updates" --message-body "$TRAVIS_BRANCH" --region=us-east-1
