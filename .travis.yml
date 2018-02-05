@@ -10,6 +10,9 @@ services:
   - docker
 
 before_install:
+  - pip install --user awscli
+
+install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     docker build --no-cache -t somrc/lolatest:latest . ;
     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
@@ -29,10 +32,7 @@ notifications:
     recipients:
     - nmagee@gmail.com
 
-before_deploy: pip install --user awscli
-
-deploy:
+after_success:
   # Create a message in SQS
   - provider: script
-    # script: ~/.local/bin/aws sns publish --region=us-east-1 --topic-arn '$TOPIC_ARN' --message '{'clear'}'
     script: ~/.local/bin/aws sqs send-message --queue-url "https://queue.amazonaws.com/474683445819/lola-updates" --message-body "$TRAVIS_BRANCH" --region=us-east-1
