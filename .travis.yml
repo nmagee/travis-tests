@@ -10,7 +10,7 @@ services:
   - docker
 
 before_install:
-  - pip install awscli
+  - pip install --user awscli
   - bash -c 'which aws'
   - bash -c 'whereis aws'
 
@@ -35,7 +35,7 @@ install:
 script:
   - provider: script
     # script: ~/.local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH'
-    script: aws sqs list-queues
+    script: ~/.local/bin/aws sqs list-queues
 
 # after_success:
 #   - if [ "$TRAVIS_BRANCH" == "master" ]; then
