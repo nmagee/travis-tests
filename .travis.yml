@@ -32,10 +32,9 @@ install:
     docker push somrc/lolatest:dev;
     fi
 
-after_install:
+script:
   - provider: script
     script: ~/.local/bin/aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body '$TRAVIS_BRANCH'
-
 
 notifications:
   email:
