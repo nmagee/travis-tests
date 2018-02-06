@@ -16,20 +16,17 @@ before_install:
 
 install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    # docker build --no-cache -t somrc/lolatest:latest . ;
-    # docker push somrc/lolatest:latest;
+    # docker build --no-cache -t nemagee/nginx:latest . ;
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
   - if [ "$TRAVIS_BRANCH" == "staging" ]; then
     cd staging/
-    # docker build --no-cache -t somrc/lolatest:staging . ;
-    # docker push somrc/lolatest:staging;
+    docker build --no-cache -t nemagee/nginx:staging . ;
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
   - if [ "$TRAVIS_BRANCH" == "dev" ]; then
     cd dev/ ;
-    # docker build --no-cache -t somrc/lolatest:dev . ;
-    # docker push somrc/lolatest:dev;
+    docker build --no-cache -t nemagee/nginx:dev . ;
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
 
