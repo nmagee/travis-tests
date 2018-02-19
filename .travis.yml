@@ -15,18 +15,22 @@ install:
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
 
-after_install:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    echo "This is a MASTER test...";
-    echo $TRAVIS_BRANCH;
-    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "dev" ]; then
-    echo "This is a DEV test...";
-    echo $TRAVIS_BRANCH;
-    cd dev/ ;
-    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-    fi
+jobs:
+  include:
+    - stage: launch
+      if [ "$TRAVIS_BRANCH" == "master" ]; then
+      echo "This is a MASTER test...";
+      echo $TRAVIS_BRANCH;
+      aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+      fi
+    - stage: deploy
+      if [ "$TRAVIS_BRANCH" == "dev" ]; then
+      echo "This is a DEV test...";
+      echo $TRAVIS_BRANCH;
+      cd dev/ ;
+      aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+      fi
+
 
 notifications:
   email:
