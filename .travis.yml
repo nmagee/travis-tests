@@ -15,7 +15,7 @@ install:
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
     fi
 
-deploy:
+after_install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     echo "This is a MASTER test...";
     echo $TRAVIS_BRANCH;
