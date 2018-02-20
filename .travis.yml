@@ -3,16 +3,15 @@ language: bash
 services:
   - docker
 
-before_install:
-  - pip install --user awscli
-
-stages:
-  - compile
-  - name: deploy
-    if: branch = master
-    script: aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-    if: branch = dev
-    script: aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+jobs:
+  include:
+    - stage: install_cli
+      script:
+      - pip install --user awscli
+    - stage: notify
+      script: aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+      on:
+        branch: dev
 
 # install:
 #   - if [ "$TRAVIS_BRANCH" == "master" ]; then
