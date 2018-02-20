@@ -1,34 +1,16 @@
-branches:
-  only:
-  - master
-  - staging
-  - dev
-
 language: bash
 
 services:
   - docker
 
-before_install:
-  - pip install --user awscli
-  - export PATH=$PATH:$HOME/.local/bin
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-
-install:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    # docker build --no-cache -t nemagee/nginx:latest . ;
-    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "staging" ]; then
-    cd staging/
-    docker build --no-cache -t nemagee/nginx:staging . ;
-    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-    fi
-  - if [ "$TRAVIS_BRANCH" == "dev" ]; then
-    cd dev/ ;
-    docker build --no-cache -t nemagee/nginx:dev . ;
-    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-    fi
+jobs:
+  include:
+    - stage: install and notify
+      script:
+      - pip install --user awscli
+      - aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
+      on:
+        branch: dev
 
 notifications:
   email:
@@ -36,4 +18,3 @@ notifications:
     on_failure: always
     recipients:
     - nmagee@gmail.com
-
