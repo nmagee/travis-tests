@@ -1,5 +1,6 @@
 language: bash
 
+<<<<<<< HEAD
 services:
   - docker
 
@@ -20,6 +21,16 @@ jobs:
 #     cd dev/ ;
 #     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
 #     fi
+=======
+install:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+    echo "I am the master!";
+    fi
+  - if [ "$TRAVIS_BRANCH" == "dev" ]; then
+    pip install --user awscli;
+    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/send-me' --message-body $TRAVIS_BRANCH;
+    fi
+>>>>>>> master
 
 notifications:
   email:
@@ -27,4 +38,3 @@ notifications:
     on_failure: always
     recipients:
     - nmagee@gmail.com
-
