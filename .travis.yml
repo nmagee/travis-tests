@@ -1,27 +1,5 @@
 language: bash
 
-<<<<<<< HEAD
-services:
-  - docker
-
-jobs:
-  include:
-    - stage: install and notify
-      script:
-      - pip install --user awscli
-      - aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-      on:
-        branch: dev
-
-# install:
-#   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-#     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-#     fi
-#   - if [ "$TRAVIS_BRANCH" == "dev" ]; then
-#     cd dev/ ;
-#     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-#     fi
-=======
 install:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
     echo "I am the master!";
@@ -30,7 +8,6 @@ install:
     pip install --user awscli;
     aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/send-me' --message-body $TRAVIS_BRANCH;
     fi
->>>>>>> master
 
 notifications:
   email:
