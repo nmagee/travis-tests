@@ -6,11 +6,11 @@ services:
 jobs:
   include:
     - stage: install and notify
+      on:
+        branch: dev
       script:
       - pip install --user awscli
       - aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/lola-updates' --message-body $TRAVIS_BRANCH;
-      on:
-        branch: dev
 
 notifications:
   email:
