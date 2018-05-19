@@ -1,19 +1,8 @@
-## This is the MASTER travis file
-
-language: bash
-
+language: python
 install:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-    echo "I am the master!";
-    fi
-  - if [ "$TRAVIS_BRANCH" == "dev" ]; then
-    pip install --user awscli;
-    aws sqs send-message --queue-url 'https://queue.amazonaws.com/474683445819/send-me' --message-body $TRAVIS_BRANCH;
-    fi
-
-notifications:
-  email:
-    on_success: change
-    on_failure: always
-    recipients:
-    - nmagee@gmail.com
+  - pip install -U pip wheel
+  - pip install -r requirements.txt
+script: echo "All done!"
+# cache:
+#   directories:
+#     - $HOME/.cache/pip

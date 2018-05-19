@@ -1,0 +1,5 @@
+lxml
+cryptography
+gevent
+boto3
+awscli
